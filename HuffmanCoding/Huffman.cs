@@ -8,8 +8,11 @@ namespace HuffmanCoding
 {
     public class HuffmanEncoder
     {
-        
-        PriorityQueue<char, int> items = new PriorityQueue<char, int>(new FrequencyComparer());
+        public PriorityQueue<char, int> items;
+
+        public string Input = "";
+
+        //Not sure what to do, do I make a tree??
 
         public Dictionary<char, int> GetFrequency(string s)
         {
@@ -45,9 +48,10 @@ namespace HuffmanCoding
             
         }
 
-        public HuffmanEncoder()
+        public HuffmanEncoder(string input)
         {
-
+            Input = input;
+            items = new PriorityQueue<char, int>(new FrequencyComparer());
         }
 
     }
