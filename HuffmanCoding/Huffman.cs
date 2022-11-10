@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BinarySearchTree;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +10,15 @@ namespace HuffmanCoding
 {
     public class HuffmanEncoder
     {
-        public PriorityQueue<char, int> items;
+        private PriorityQueue<(Node<char>, int), int> items;
 
         public string Input = "";
 
-        //Not sure what to do, do I make a tree??
+        public HuffmanEncoder(string input)
+        {
+            Input = input;
+            items = new PriorityQueue<(Node<char>, int), int>(new FrequencyComparer());
+        }
 
         public Dictionary<char, int> GetFrequency(string s)
         {
@@ -41,17 +47,47 @@ namespace HuffmanCoding
                 }
                 frequency.Add(chars[i], count);
             }
+            foreach (var item in frequency)
+            {
+                Node<char> node = new Node<char>(item.Key);
+                items.Enqueue((node, item.Value), item.Value);
+            }
             return frequency;
         }
+
         public void TreeMaker()
         {
             
+            while (items.Count > 1)
+            {
+                (Node<char> Node, int Frequency) firstNode = items.Dequeue();
+                (Node<char> Node, int Frequency) secondNode = items.Dequeue();
+
+                int sumFreq = firstNode.Frequency + secondNode.Frequency;
+
+                (Node<char> Node, int Frequency) sentinalNode = (new Node<char>('$') { LeftNode = firstNode.Node, RightNode = secondNode.Node }, sumFreq);
+
+                items.Enqueue(sentinalNode, sentinalNode.Item2);
+            }
+
+
+
+        }
+        //Code Traversal and Tree
+
+        public Dictionary<char, string> Traversal()
+        {
+            Dictionary<char, string> compressedValue = new Dictionary<char, string>();
+
+            Traversal(compressedValue);
+
+            return compressedValue;
         }
 
-        public HuffmanEncoder(string input)
+        private void Traversal(Dictionary<char, string> compressedValue)
         {
-            Input = input;
-            items = new PriorityQueue<char, int>(new FrequencyComparer());
+
+
         }
 
     }
