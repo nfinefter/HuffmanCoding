@@ -66,6 +66,10 @@ namespace HuffmanCoding
                 int sumFreq = firstNode.Frequency + secondNode.Frequency;
 
                 (Node<char> Node, int Frequency) sentinalNode = (new Node<char>('$') { LeftNode = firstNode.Node, RightNode = secondNode.Node }, sumFreq);
+                
+                //Test
+                sentinalNode.Node.LeftNode = firstNode;
+                sentinalNode.Node.RightNode = secondNode;
 
                 items.Enqueue(sentinalNode, sentinalNode.Item2);
             }
@@ -86,8 +90,7 @@ namespace HuffmanCoding
 
         private void Traversal(Dictionary<char, string> compressedValue)
         {
-
-
+            
         }
 
     }
