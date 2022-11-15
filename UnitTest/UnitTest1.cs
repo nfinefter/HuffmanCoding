@@ -1,15 +1,16 @@
+using BinarySearchTree;
+
 using HuffmanCoding;
 
 namespace UnitTest
 {
     public class UnitTest1
     {
-        HuffmanEncoder huffman = new HuffmanEncoder(); 
 
         [Fact]
         public void GetFrequency()
         {
-            Dictionary<char, int> temp = huffman.GetFrequency("hiiii");
+            Dictionary<char, int> temp = HuffmanEncoder.GetFrequency("hello");
 
             var value = 0;
 
@@ -17,5 +18,13 @@ namespace UnitTest
 
             Assert.True(value == 1);
         }
+        [Fact]
+        public void Huffman()
+        {
+            string compressed = HuffmanEncoder.Huffman("hello");
+
+            Assert.True(compressed == "0");           
+        }
+        //Compare this to GMR Huffman (add GMR to the solution).
     }
 }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BinarySearchTree
 {
-    class Node<T>
+    public class Node<T>
     {
         public Node<T> LeftNode { get; set; }
         public Node<T> RightNode { get; set; }

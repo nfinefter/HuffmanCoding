@@ -8,19 +8,28 @@ using System.Threading.Tasks;
 
 namespace HuffmanCoding
 {
-    public class HuffmanEncoder
+    public static class HuffmanEncoder
     {
-        private PriorityQueue<(Node<char>, int), int> items;
 
-        public string Input = "";
-
-        public HuffmanEncoder(string input)
+        public static string Huffman(string s)
         {
-            Input = input;
-            items = new PriorityQueue<(Node<char>, int), int>(new FrequencyComparer());
+            PriorityQueue<(Node<char>, int), int> items = new PriorityQueue<(Node<char>, int), int>();
+
+            string compressed = "";
+            Dictionary<char, string> compressedValue = new Dictionary<char, string>();
+
+            GetFrequency(s, items);
+            TreeMaker(items, out compressedValue);
+
+            foreach (var item in compressedValue)
+            {
+                compressed += item.Value;
+            }
+
+            return compressed;
         }
 
-        public Dictionary<char, int> GetFrequency(string s)
+        public static Dictionary<char, int> GetFrequency(string s, PriorityQueue<(Node<char>, int), int> items)
         {
             Dictionary<char, int> frequency = new Dictionary<char, int>();
 
@@ -55,43 +64,74 @@ namespace HuffmanCoding
             return frequency;
         }
 
-        public void TreeMaker()
+        public static Dictionary<char, int> GetFrequency(string s)
         {
-            
+            Dictionary<char, int> frequency = new Dictionary<char, int>();
+
+            List<char> chars = new List<char>();
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (!chars.Contains(s[i]))
+                {
+                    chars.Add(s[i]);
+                }
+            }
+
+            int count = 0;
+
+            for (int i = 0; i < chars.Count; i++)
+            {
+                for (int j = 0; j < s.Length; j++)
+                {
+                    if (chars[i] == s[j])
+                    {
+                        count++;
+                    }
+                }
+                frequency.Add(chars[i], count);
+            }
+
+            return frequency;
+        }
+
+        public static void TreeMaker(PriorityQueue<(Node<char>, int), int> items, out Dictionary<char, string> compressedValue)
+        {   
+            (Node<char> Node, int Frequency) firstNode;
+            (Node<char> Node, int Frequency) secondNode;
+
             while (items.Count > 1)
             {
-                (Node<char> Node, int Frequency) firstNode = items.Dequeue();
-                (Node<char> Node, int Frequency) secondNode = items.Dequeue();
+                firstNode = items.Dequeue();
+                secondNode = items.Dequeue();
 
                 int sumFreq = firstNode.Frequency + secondNode.Frequency;
 
                 (Node<char> Node, int Frequency) sentinalNode = (new Node<char>('$') { LeftNode = firstNode.Node, RightNode = secondNode.Node }, sumFreq);
-                
-                //Test
-                sentinalNode.Node.LeftNode = firstNode;
-                sentinalNode.Node.RightNode = secondNode;
+
+                sentinalNode.Node.LeftNode = firstNode.Node;
+                sentinalNode.Node.RightNode = secondNode.Node;
 
                 items.Enqueue(sentinalNode, sentinalNode.Item2);
             }
 
+            compressedValue = new Dictionary<char, string>();
+
+            Traversal(items.Dequeue().Item1, compressedValue, "");
 
 
         }
-        //Code Traversal and Tree
 
-        public Dictionary<char, string> Traversal()
+        public static void Traversal(Node<char> root, Dictionary<char, string> compressedValue, string s)
         {
-            Dictionary<char, string> compressedValue = new Dictionary<char, string>();
+            compressedValue.Add(root.Data, "");
 
-            Traversal(compressedValue);
+            if (root.LeftNode == null) return;
 
-            return compressedValue;
-        }
-
-        private void Traversal(Dictionary<char, string> compressedValue)
-        {
+            Traversal(root.LeftNode, compressedValue, s + '0');
+            
+            Traversal(root.RightNode, compressedValue, s + '1');
             
         }
-
     }
 }
