@@ -34,5 +34,14 @@ namespace UnitTest
 
             Assert.True(original == "mississippi");
         }
+        [Fact]
+        public void TreeToString()
+        {
+            HuffmanEncoder.Huffman("mississippi", out Node<char> root);
+
+            string tree = HuffmanEncoder.TreeToString(root);
+
+            Assert.True(tree == "");
+        }
     }
 }

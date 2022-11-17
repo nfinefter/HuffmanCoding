@@ -44,7 +44,7 @@ namespace HuffmanCoding
                     curr = curr.LeftNode;
 
                 }
-                else
+                else if (curr.RightNode != null)
                 {
                     curr = curr.RightNode;
                 }
@@ -59,6 +59,20 @@ namespace HuffmanCoding
             //Make string to tree
 
             return treeString;
+        }
+        public static Node<char> StringToTree(string treeString)
+        {
+            Node<char> root;
+
+            root = new Node<char>(treeString[0], false);
+            //How to check if node is Sentinal or just $
+
+            for (int i = 1; i < treeString.Length; i++)
+            {
+                
+            }
+
+            return root;
         }
 
         public static string DeCompressed(string compressed, Node<char> root)
