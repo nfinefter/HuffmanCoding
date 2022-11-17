@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -118,20 +119,19 @@ namespace HuffmanCoding
             compressedValue = new Dictionary<char, string>();
 
             Traversal(items.Dequeue().Item1, compressedValue, "");
-
-
         }
 
         public static void Traversal(Node<char> root, Dictionary<char, string> compressedValue, string s)
         {
-            compressedValue.Add(root.Data, "");
+
+            if (!compressedValue.ContainsKey(root.Data)) compressedValue.Add(root.Data, s);
+            //else s.Remove(s.Length-1);
 
             if (root.LeftNode == null) return;
 
             Traversal(root.LeftNode, compressedValue, s + '0');
             
             Traversal(root.RightNode, compressedValue, s + '1');
-            
         }
     }
 }

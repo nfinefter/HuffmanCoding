@@ -25,6 +25,7 @@ namespace UnitTest
 
             Assert.True(compressed == "0");           
         }
-        //Compare this to GMR Huffman (add GMR to the solution).
+        //Not sure if it works properly
+        //Didn't know how to add GMR Solution
     }
 }
