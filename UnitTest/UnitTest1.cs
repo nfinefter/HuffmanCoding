@@ -21,11 +21,18 @@ namespace UnitTest
         [Fact]
         public void Huffman()
         {
-            string compressed = HuffmanEncoder.Huffman("hello");
+            string compressed = HuffmanEncoder.Huffman("mississippi", out _);
 
             Assert.True(compressed == "0");           
         }
-        //Not sure if it works properly
-        //Didn't know how to add GMR Solution
+        [Fact]
+        public void DeCompress()
+        {
+            string compressed = HuffmanEncoder.Huffman("mississippi", out Node<char> root);
+
+            string original = HuffmanEncoder.DeCompressed(compressed, root);
+
+            Assert.True(original == "mississippi");
+        }
     }
 }
