@@ -55,22 +55,15 @@ namespace HuffmanCoding
                 }
             }
 
-            //Test this
-            //Make string to tree
-
             return treeString;
         }
         public static Node<char> StringToTree(string treeString)
         {
             Node<char> root;
 
-            root = new Node<char>(treeString[0], false);
-            //How to check if node is Sentinal or just $
+            root = new Node<char>('$', true);
 
-            for (int i = 1; i < treeString.Length; i++)
-            {
-                
-            }
+
 
             return root;
         }
