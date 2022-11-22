@@ -1,6 +1,7 @@
 ﻿using BinarySearchTree;
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -23,7 +24,6 @@ namespace HuffmanCoding
             GetFrequency(s, items);
             TreeMaker(items, out compressedValue, out root);
 
-            //encode word not dictionary
             foreach (char c in s)
             {
                 compressed += compressedValue[c];
@@ -35,25 +35,34 @@ namespace HuffmanCoding
         {
             string treeString = "";
 
+            Stack<Node<char>> nodes = new Stack<Node<char>>();
+
             Node<char> curr = root;
 
-            while (curr != null)
-            {
-                if (curr.LeftNode != null)
-                {
-                    curr = curr.LeftNode;
+            string chars = "";
 
-                }
-                else if (curr.RightNode != null)
+            do
+            {
+                while (curr != null)
                 {
-                    curr = curr.RightNode;
+                    nodes.Push(curr);
+                    curr = curr.LeftNode;
                 }
-                if (curr.Sentinal == false)
+                curr = nodes.Pop();
+
+                if (curr.Sentinal == true)
                 {
-                    byte character = (byte)curr.Data;
-                    treeString += Convert.ToString(character, 2);
+                    chars += "1";
                 }
-            }
+                else
+                {
+                    chars += "0";
+                    chars.Append(curr.Data);   
+                }
+                //Have the chars and stuff, need to add size indicator and final string
+                
+                curr = curr.RightNode;
+            } while (curr != null || nodes.Count != 0);
 
             return treeString;
         }
