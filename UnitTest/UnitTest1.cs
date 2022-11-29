@@ -41,7 +41,7 @@ namespace UnitTest
 
             string tree = HuffmanEncoder.TreeToString(root);
 
-            Assert.True(tree == "");
+            Assert.True(tree == "0");
         }
     }
 }

@@ -13,6 +13,7 @@ namespace HuffmanCoding
 {
     public static class HuffmanEncoder
     {
+        public static Dictionary<char, string> CompressedValue;
 
         public static string Huffman(string s, out Node<char> root)
         {
@@ -29,6 +30,8 @@ namespace HuffmanCoding
                 compressed += compressedValue[c];
             }
 
+            CompressedValue = compressedValue;
+
             return compressed;
         }
         public static string TreeToString(Node<char> root)
@@ -41,6 +44,10 @@ namespace HuffmanCoding
 
             string chars = "";
 
+            int leafCount = CompressedValue.Keys.Count;
+
+            chars += (byte)leafCount;
+            //Not casting as byte
             do
             {
                 while (curr != null)
@@ -57,9 +64,15 @@ namespace HuffmanCoding
                 else
                 {
                     chars += "0";
-                    chars.Append(curr.Data);   
+                    string temp = CompressedValue[curr.Data];
+
+                    for (int i = temp.Length; i < 8; i++)
+                    {
+                        chars += "0";
+                    }
+                    chars += temp;
+
                 }
-                //Have the chars and stuff, need to add size indicator and final string
                 
                 curr = curr.RightNode;
             } while (curr != null || nodes.Count != 0);
