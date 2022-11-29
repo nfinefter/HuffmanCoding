@@ -32,22 +32,33 @@ namespace HuffmanCoding
 
             CompressedValue = compressedValue;
 
+            TreeToString(root, compressed);
+
             return compressed;
         }
-        public static string TreeToString(Node<char> root)
+        public static void Filler(ref string s, string filler)
         {
-            string treeString = "";
+            for (int i = filler.Length; i < 8; i++)
+            {
+                s += "0";
+            }
+            s += filler;
+        }
 
+        public static string TreeToString(Node<char> root, string compressed)
+        {
             Stack<Node<char>> nodes = new Stack<Node<char>>();
 
             Node<char> curr = root;
 
-            string chars = "";
+            string treeString = "";
 
             int leafCount = CompressedValue.Keys.Count;
 
-            chars += (byte)leafCount;
-            //Not casting as byte
+            string temp = Convert.ToString((byte)(leafCount), 2);
+
+            Filler(ref treeString, temp);
+            
             do
             {
                 while (curr != null)
@@ -59,26 +70,25 @@ namespace HuffmanCoding
 
                 if (curr.Sentinal == true)
                 {
-                    chars += "1";
+                    treeString += "1";
                 }
                 else
                 {
-                    chars += "0";
-                    string temp = CompressedValue[curr.Data];
+                    treeString += "0";
+                    temp = Convert.ToString((byte)(curr.Data), 2);
 
-                    for (int i = temp.Length; i < 8; i++)
-                    {
-                        chars += "0";
-                    }
-                    chars += temp;
-
+                    Filler(ref treeString, temp);
                 }
                 
                 curr = curr.RightNode;
             } while (curr != null || nodes.Count != 0);
 
+            treeString += compressed;
+
             return treeString;
         }
+
+
         public static Node<char> StringToTree(string treeString)
         {
             Node<char> root;

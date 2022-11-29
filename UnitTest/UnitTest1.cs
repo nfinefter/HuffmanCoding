@@ -37,9 +37,9 @@ namespace UnitTest
         [Fact]
         public void TreeToString()
         {
-            HuffmanEncoder.Huffman("mississippi", out Node<char> root);
+            string compressed = HuffmanEncoder.Huffman("mississippi", out Node<char> root);
 
-            string tree = HuffmanEncoder.TreeToString(root);
+            string tree = HuffmanEncoder.TreeToString(root, compressed);
 
             Assert.True(tree == "0");
         }
