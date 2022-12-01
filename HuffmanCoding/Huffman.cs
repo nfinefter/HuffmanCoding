@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace HuffmanCoding
 {
+    using Variable = Int32;
     public static class HuffmanEncoder
     {
         public static Dictionary<char, string> CompressedValue;
@@ -51,7 +52,7 @@ namespace HuffmanCoding
 
             Node<char> curr = root;
 
-            string treeString = "000";
+            string treeString = "";
 
             int leafCount = CompressedValue.Keys.Count;
 
@@ -64,42 +65,87 @@ namespace HuffmanCoding
                 while (curr != null)
                 {
                     nodes.Push(curr);
+                    if (curr.Sentinal == true)
+                    {
+                        treeString += "1";
+                    }
+                    else
+                    {
+                        treeString += "0";
+                        temp = Convert.ToString((byte)(curr.Data), 2);
+
+                        Filler(ref treeString, temp);
+                    }
                     curr = curr.LeftNode;
                 }
+
                 curr = nodes.Pop();
-
-                if (curr.Sentinal == true)
-                {
-                    treeString += "1";
-                }
-                else
-                {
-                    treeString += "0";
-                    temp = Convert.ToString((byte)(curr.Data), 2);
-
-                    Filler(ref treeString, temp);
-                }
-                
                 curr = curr.RightNode;
             } while (curr != null || nodes.Count != 0);
 
             treeString += compressed;
+
             int padCount = 0;
-            while (treeString.Length % 8 != 0)
+            while ((treeString.Length + 3) % 8 != 0)
             {
-                padCount++;
+                padCount++; 
                 treeString += "0";
             }
-            //How to change first three zeroes to correct padCount without just brute forcing with if loops
+
+            string stringCount = Convert.ToString(padCount, 2);
+
+            while (stringCount.Length < 3)
+            {
+                stringCount.Insert(0, "0");
+            }
+
+            treeString = treeString.Insert(0, stringCount);
+            
             return treeString;
         }
 
 
         public static Node<char> StringToTree(string treeString)
         {
-            Node<char> root;
+            Variable index = 0;
 
-            root = new Node<char>('$', true);
+            int padCount = Convert.ToByte(treeString.Substring(index, index += 3), 2);
+            int leafCount = Convert.ToByte(treeString.Substring(index, index += 8), 2);
+
+            if (leafCount == 1)
+            {
+                char c = (char)Convert.ToByte(treeString.Substring(index += 1, index += 8), 2);
+                return new Node<char>(c, false);
+            }
+
+            Node<char> root = new Node<char>('$', true);
+
+            Stack<Node<char>> nodes = new Stack<Node<char>>();
+
+            nodes.Push(root);
+
+            Variable leafCounter = 0;
+
+            Node<char> temp;
+
+            for (int i = index += 1; leafCounter < leafCount; i++, index++)
+            {
+                if (treeString[i] == '0')
+                {
+                    char c = (char)Convert.ToByte(treeString.Substring(index, index += 8), 2);
+                    leafCounter++;
+                    temp = new Node<char>(c, false);
+                }
+                else
+                {
+                    temp = new Node<char>('$', true);
+                    nodes.Push(temp);
+                    //Push the sentinal and then pop it once it has two children
+                }
+                
+             
+            }
+
 
 
 
