@@ -51,7 +51,7 @@ namespace HuffmanCoding
 
             Node<char> curr = root;
 
-            string treeString = "";
+            string treeString = "000";
 
             int leafCount = CompressedValue.Keys.Count;
 
@@ -84,7 +84,13 @@ namespace HuffmanCoding
             } while (curr != null || nodes.Count != 0);
 
             treeString += compressed;
-
+            int padCount = 0;
+            while (treeString.Length % 8 != 0)
+            {
+                padCount++;
+                treeString += "0";
+            }
+            //How to change first three zeroes to correct padCount without just brute forcing with if loops
             return treeString;
         }
 
