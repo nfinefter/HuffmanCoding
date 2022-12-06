@@ -33,7 +33,7 @@ namespace HuffmanCoding
 
             CompressedValue = compressedValue;
 
-            TreeToString(root, compressed);
+            compressed = TreeToString(root, compressed);
 
             return compressed;
         }
@@ -96,7 +96,7 @@ namespace HuffmanCoding
 
             while (stringCount.Length < 3)
             {
-                stringCount.Insert(0, "0");
+                stringCount = stringCount.Insert(0, "0");
             }
 
             treeString = treeString.Insert(0, stringCount);
@@ -110,11 +110,11 @@ namespace HuffmanCoding
             Variable index = 0;
 
             int padCount = Convert.ToByte(treeString.Substring(index, index += 3), 2);
-            int leafCount = Convert.ToByte(treeString.Substring(index, index += 8), 2);
+            int leafCount = Convert.ToByte(treeString.Substring(index, 8), 2);
 
             if (leafCount == 1)
             {
-                char c = (char)Convert.ToByte(treeString.Substring(index += 1, index += 8), 2);
+                char c = (char)Convert.ToByte(treeString.Substring(index += 1, 8), 2);
                 return new Node<char>(c, false);
             }
 
@@ -128,26 +128,41 @@ namespace HuffmanCoding
 
             Node<char> temp;
 
-            for (int i = index += 1; leafCounter < leafCount; i++, index++)
+
+            for (index += 9; leafCounter < leafCount;)
             {
-                if (treeString[i] == '0')
+                if (treeString[index++] == '0')
                 {
-                    char c = (char)Convert.ToByte(treeString.Substring(index, index += 8), 2);
+                    char c = (char)Convert.ToByte(treeString.Substring(index, 8), 2);
+                    index += 8;
                     leafCounter++;
                     temp = new Node<char>(c, false);
                 }
                 else
-                {
+                { 
                     temp = new Node<char>('$', true);
+
                     nodes.Push(temp);
+
+                    if (temp.LeftNode == null)
+                    {
+                        temp.LeftNode = temp;
+                    }
+                    else if (temp.RightNode == null)
+                    {
+                        temp.RightNode = temp;
+                        temp = temp.RightNode;
+                    }
+
+                    if (temp.RightNode != null)
+                    {
+                        nodes.Pop();
+                    }
+
+
                     //Push the sentinal and then pop it once it has two children
                 }
-                
-             
             }
-
-
-
 
             return root;
         }
