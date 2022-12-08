@@ -122,12 +122,13 @@ namespace HuffmanCoding
 
             Stack<Node<char>> nodes = new Stack<Node<char>>();
 
+            Queue<Node<char>> allNodes = new Queue<Node<char>>();
+
             nodes.Push(root);
 
             Variable leafCounter = 0;
 
             Node<char> temp;
-
 
             for (index += 9; leafCounter < leafCount;)
             {
@@ -137,34 +138,52 @@ namespace HuffmanCoding
                     index += 8;
                     leafCounter++;
                     temp = new Node<char>(c, false);
+                    allNodes.Enqueue(temp);
                 }
                 else
                 { 
                     temp = new Node<char>('$', true);
+                    allNodes.Enqueue(temp);
 
                     nodes.Push(temp);
 
-                    if (temp.LeftNode == null)
-                    {
-                        temp.LeftNode = temp;
-                    }
-                    else if (temp.RightNode == null)
-                    {
-                        temp.RightNode = temp;
-                        temp = temp.RightNode;
-                    }
-
-                    if (temp.RightNode != null)
-                    {
-                        nodes.Pop();
-                    }
-
-
                     //Push the sentinal and then pop it once it has two children
                 }
+
+                if (temp.RightNode != null)
+                {
+                    nodes.Pop();
+                }
+                //Dont need stack because used recursion
+            }
+            TreeRebuilder(root, allNodes);
+
+            //Finshed
+            return root;
+        }
+
+        public static void TreeRebuilder(Node<char> node, Queue<Node<char>> temp)
+        {
+            if (temp.Count == 0) return;
+
+            var parent = node;
+
+            var curr = temp.Dequeue();
+
+            if (curr.Sentinal == true && curr.RightNode != null) return;
+
+            if (node.LeftNode == null)
+            {
+                node.LeftNode = curr;
+                if (curr.Sentinal) TreeRebuilder(node.LeftNode, temp);
+                else TreeRebuilder(parent, temp);
+            }
+            else if (node.LeftNode != null && node.RightNode == null)
+            {
+                node.RightNode = curr;
+                if (curr.Sentinal) TreeRebuilder(node.RightNode, temp);
             }
 
-            return root;
         }
 
         public static string DeCompressed(string compressed, Node<char> root)
