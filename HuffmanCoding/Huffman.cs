@@ -158,32 +158,18 @@ namespace HuffmanCoding
             }
             TreeRebuilder(root, allNodes);
 
-            //Finshed
             return root;
         }
 
         public static void TreeRebuilder(Node<char> node, Queue<Node<char>> temp)
         {
-            if (temp.Count == 0) return;
+            if (temp.Count == 0 || !node.Sentinal) return;
 
-            var parent = node;
+            var curr = node.LeftNode = temp.Dequeue();
+            TreeRebuilder(curr, temp);
 
-            var curr = temp.Dequeue();
-
-            if (curr.Sentinal == true && curr.RightNode != null) return;
-
-            if (node.LeftNode == null)
-            {
-                node.LeftNode = curr;
-                if (curr.Sentinal) TreeRebuilder(node.LeftNode, temp);
-                else TreeRebuilder(parent, temp);
-            }
-            else if (node.LeftNode != null && node.RightNode == null)
-            {
-                node.RightNode = curr;
-                if (curr.Sentinal) TreeRebuilder(node.RightNode, temp);
-            }
-
+            curr = node.RightNode = temp.Dequeue();
+            TreeRebuilder(curr, temp);
         }
 
         public static string DeCompressed(string compressed, Node<char> root)
