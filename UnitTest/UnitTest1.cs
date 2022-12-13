@@ -23,7 +23,7 @@ namespace UnitTest
         {
             string compressed = HuffmanEncoder.Huffman("mississippi", out _);
 
-            Assert.True(compressed == "0");           
+            Assert.True(compressed != "0");           
         }
         [Fact]
         public void DeCompress()
@@ -37,18 +37,16 @@ namespace UnitTest
         [Fact]
         public void TreeToString()
         {
-            string compressed = HuffmanEncoder.Huffman("mississippi", out Node<char> root);
+            string compressed = HuffmanEncoder.Huffman("MMMM", out Node<char> root);
 
-            string tree = HuffmanEncoder.TreeToString(root, compressed);
-
-            Assert.True(tree != "0");
+            Assert.True(compressed == "000000000010010011010000");
         }
         [Fact]
         public void StringToTree()
         {
             string compressed = HuffmanEncoder.Huffman("mississippi", out Node<char> root);
 
-            Node<char> tree = HuffmanEncoder.StringToTree(compressed);
+            Node<char> tree = HuffmanEncoder.StringToTree(compressed, out _);
 
             Assert.True(tree != null);
         }

@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
@@ -105,9 +106,9 @@ namespace HuffmanCoding
         }
 
 
-        public static Node<char> StringToTree(string treeString)
+        public static Node<char> StringToTree(string treeString, out int index)
         {
-            Variable index = 0;
+            index = 0;
 
             int padCount = Convert.ToByte(treeString.Substring(index, index += 3), 2);
             int leafCount = Convert.ToByte(treeString.Substring(index, 8), 2);
@@ -176,11 +177,15 @@ namespace HuffmanCoding
         {
             string original = "";
 
+            root = StringToTree(compressed, out int index);
+
+            //Fix the reading and decompression
+
             Node<char> curr = root;
 
-            for (int i = 0; i < compressed.Length; i++)
+            while (index < compressed.Length)
             {
-                if (compressed[i] == '0')
+                if (compressed[index] == '0')
                 {
                     curr = curr.LeftNode;
                 }
@@ -278,11 +283,18 @@ namespace HuffmanCoding
 
             root = items.Dequeue().Item1;
 
+            if (root.LeftNode == null && root.RightNode == null)
+            {
+                compressedValue.Add(root.Data, "0");
+                return;
+            }
+
             Traversal(root, compressedValue, "");
         }
 
         public static void Traversal(Node<char> root, Dictionary<char, string> compressedValue, string s)
         {
+
             if (root.Sentinal == false) compressedValue.Add(root.Data, s);
 
             if (root.LeftNode == null) return;
