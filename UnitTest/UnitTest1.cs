@@ -25,14 +25,18 @@ namespace UnitTest
 
             Assert.True(compressed != "0");           
         }
-        [Fact]
-        public void DeCompress()
+        [Theory]
+        [InlineData("hii")]
+        [InlineData("iiiiiiiii")]
+        [InlineData("MISSISSIPPI")]
+        [InlineData("i")]
+        public void DeCompress(string s)
         {
-            string compressed = HuffmanEncoder.Huffman("hiiiiiiiii", out Node<char> root);
+            string compressed = HuffmanEncoder.Huffman(s, out Node<char> root);
 
             string original = HuffmanEncoder.DeCompressed(compressed, root);
 
-            Assert.True(original == "hiiiiiiiii");
+            Assert.True(original == s);
         }
         [Fact]
         public void TreeToString()

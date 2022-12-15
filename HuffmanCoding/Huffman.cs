@@ -115,7 +115,9 @@ namespace HuffmanCoding
 
             if (leafCount == 1)
             {
-                char c = (char)Convert.ToByte(treeString.Substring(index += 1, 8), 2);
+
+                char c = (char)Convert.ToByte(treeString.Substring(index += 9, 8), 2);
+                index += 8;
                 return new Node<char>(c, false);
             }
 
@@ -179,8 +181,15 @@ namespace HuffmanCoding
 
             Node<char> curr = StringToTree(compressed, out int index, out int leafCount, out int padCount);
 
-            if (leafCount == 1 && index >= compressed.Length - padCount) return root.Data.ToString();
-
+            if (leafCount == 1)
+            {
+                while (index < compressed.Length - padCount)
+                {
+                    original += root.Data;
+                    index++;
+                }
+                return original;
+            }
             //Fix the reading and decompression doesn't work with one char repeating
 
             int leafCounter = 0;
