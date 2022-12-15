@@ -28,11 +28,11 @@ namespace UnitTest
         [Fact]
         public void DeCompress()
         {
-            string compressed = HuffmanEncoder.Huffman("mississippi", out Node<char> root);
+            string compressed = HuffmanEncoder.Huffman("hiiiiiiiii", out Node<char> root);
 
             string original = HuffmanEncoder.DeCompressed(compressed, root);
 
-            Assert.True(original == "mississippi");
+            Assert.True(original == "hiiiiiiiii");
         }
         [Fact]
         public void TreeToString()
@@ -46,7 +46,7 @@ namespace UnitTest
         {
             string compressed = HuffmanEncoder.Huffman("mississippi", out Node<char> root);
 
-            Node<char> tree = HuffmanEncoder.StringToTree(compressed, out _);
+            Node<char> tree = HuffmanEncoder.StringToTree(compressed, out _, out _, out _);
 
             Assert.True(tree != null);
         }
